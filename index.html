@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trackitnow - GPS Vehicle Tracking & Fleet Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'track-red': '#E31837',
+                        'track-red-dark': '#B31229',
+                        'track-black': '#1A1A1A',
+                        'track-gray': '#333333',
+                        'track-light': '#F5F5F5',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { scroll-behavior: smooth; }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(227, 24, 55, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(227, 24, 55, 0.6); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes slide-path {
+            0% { stroke-dashoffset: 1000; }
+            100% { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes count-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes vehicle-move {
+            0% { offset-distance: 0%; }
+            100% { offset-distance: 100%; }
+        }
+        
+        .logo-pulse:hover {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .vehicle-path {
+            stroke-dasharray: 10 5;
+            animation: slide-path 20s linear infinite;
+        }
+        
+        .product-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(227, 24, 55, 0.2);
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #E31837;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .counter {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .mobile-menu {
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .tracking-dot {
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="font-sans bg-white text-track-gray">
+    <!-- Header -->
+    <header class="fixed w-full top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="#" class="logo-pulse flex items-center space-x-2 rounded-lg p-2 transition-all">
+                    <div class="bg-track-red text-white font-black text-2xl px-3 py-1 rounded tracking-tighter">
+                        TRACKIT<span class="text-track-black">NOW</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden lg:flex items-center space-x-6">
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Home</a>
+                    
+                    <div class="dropdown relative">
+                        <a href="#products" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors flex items-center">
+                            Vehicle Tracking <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </a>
+                        <div class="dropdown-menu hidden absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2">
+                            <a href="#" class="block px-4 py-2 hover:bg-track-light hover:text-track-red transition-colors">ERA Lite</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-track-light hover:text-track-red transition-colors">ERA Essentials</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-track-light hover:text-track-red transition-colors">ERA Advanced</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-track-light hover:text-track-red transition-colors">Remote Tachograph</a>
+                            <a href="#" class="block px-4 py-2 hover:bg-track-light hover:text-track-red transition-colors">CanBus Integration</a>
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">HGV</a>
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Accessories</a>
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Industries</a>
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Case Studies</a>
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">News</a>
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">About</a>
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Contact</a>
+                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Support</a>
+                </nav>
+                
+                <!-- Login & CTA -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <a href="#" class="text-track-gray hover:text-track-red font-medium transition-colors">Login</a>
+                    <a href="#demo" class="bg-track-red hover:bg-track-red-dark text-white px-6 py-2.5 rounded-full font-semibold transition-all hover:shadow-lg hover:scale-105">
+                        Request a Demo
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="lg:hidden text-track-gray hover:text-track-red transition-colors">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-80 bg-white shadow-2xl z-50 p-6">
+            <button id="close-menu" class="absolute top-4 right-4 text-track-gray hover:text-track-red">
+                <i class="fas fa-times text-2xl"></i>
+            </button>
+            <nav class="mt-12 space-y-4">
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">Home</a>
+                <a href="#products" class="block text-lg font-medium text-track-gray hover:text-track-red">Vehicle Tracking</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">HGV</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">Accessories</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">Industries</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">Case Studies</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">News</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">About</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">Contact</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">Support</a>
+                <a href="#" class="block text-lg font-medium text-track-gray hover:text-track-red">Login</a>
+                <a href="#demo" class="block bg-track-red text-white text-center py-3 rounded-lg font-semibold mt-6">Request a Demo</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 bg-gradient-to-br from-track-black via-track-gray to-track-black overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 opacity-20">
+            <svg class="w-full h-full" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+                <!-- UK Map Outline (Simplified) -->
+                <path d="M400,200 L450,180 L500,190 L550,170 L600,180 L650,160 L700,170 L720,200 L710,250 L680,280 L650,300 L600,320 L550,310 L500,330 L450,320 L420,300 L400,280 L380,250 Z" 
+                      fill="none" stroke="#E31837" stroke-width="2" class="vehicle-path"/>
+                
+                <!-- Animated Vehicle Dots -->
+                <circle r="6" fill="#E31837">
+                    <animateMotion dur="8s" repeatCount="indefinite" path="M400,200 L450,180 L500,190 L550,170 L600,180"/>
+                </circle>
+                <circle r="6" fill="#00D4FF">
+                    <animateMotion dur="10s" repeatCount="indefinite" path="M550,170 L600,180 L650,160 L700,170 L720,200"/>
+                </circle>
+                <circle r="6" fill="#E31837">
+                    <animateMotion dur="12s" repeatCount="indefinite" path="M500,330 L550,310 L600,320 L650,300 L680,280"/>
+                </circle>
+                
+                <!-- Connection Lines -->
+                <line x1="400" y1="200" x2="600" y2="300" stroke="#E31837" stroke-width="1" opacity="0.3">
+                    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="3s" repeatCount="indefinite"/>
+                </line>
+                <line x1="650" y1="160" x2="550" y2="310" stroke="#00D4FF" stroke-width="1" opacity="0.3">
+                    <animate attributeName="opacity" values="0.3;0.8;0.3" dur="4s" repeatCount="indefinite"/>
+                </line>
+            </svg>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <div class="inline-flex items-center bg-track-red/20 text-track-red px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                        <i class="fas fa-award mr-2"></i> Award Winning Fleet Solutions
+                    </div>
+                    <h1 class="text-4xl lg:text-6xl font-black text-white leading-tight mb-6">
+                        GPS Vehicle Tracking,<br>
+                        <span class="text-track-red">Monitoring</span> & Locating
+                    </h1>
+                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
+                        Complete fleet management solutions for businesses of all sizes. 
+                        From owner-drivers to large-scale logistics operations.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#products" class="bg-track-red hover:bg-track-red-dark text-white px-8 py-4 rounded-full font-bold text-lg transition-all hover:shadow-xl hover:scale-105 text-center">
+                            Explore Solutions
+                        </a>
+                        <a href="#demo" class="border-2 border-white text-white hover:bg-white hover:text-track-black px-8 py-4 rounded-full font-bold text-lg transition-all text-center">
+                            Request a Demo
+                        </a>
+                    </div>
+                    
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-gray-700">
+                        <div>
+                            <div class="text-3xl font-black text-track-red counter" data-target="99.9">0</div>
+                            <div class="text-sm text-gray-400">% Uptime</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-track-red counter" data-target="2008">0</div>
+                            <div class="text-sm text-gray-400">Established</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-track-red counter" data-target="6">0</div>
+                            <div class="text-sm text-gray-400">Yrs Data Retention</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Hero Visual -->
+                <div class="relative float-animation reveal">
+                    <div class="relative bg-gradient-to-br from-track-red/20 to-transparent rounded-3xl p-8 backdrop-blur-sm border border-white/10">
+                        <div class="bg-white rounded-2xl shadow-2xl p-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-green-500 rounded-full tracking-dot"></div>
+                                    <span class="text-sm font-semibold text-track-gray">Live Fleet Tracking</span>
+                                </div>
+                                <span class="text-xs text-gray-400">42 vehicles active</span>
+                            </div>
+                            
+                            <!-- Mini Map Visualization -->
+                            <div class="bg-track-light rounded-xl h-48 relative overflow-hidden">
+                                <div class="absolute inset-0 opacity-30">
+                                    <svg viewBox="0 0 400 200" class="w-full h-full">
+                                        <path d="M50,100 Q100,50 150,80 T250,70 T350,100" fill="none" stroke="#ccc" stroke-width="2"/>
+                                        <path d="M30,120 Q80,150 130,130 T230,140 T330,120" fill="none" stroke="#ccc" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                                <!-- Vehicle Markers -->
+                                <div class="absolute top-1/4 left-1/4 w-4 h-4 bg-track-red rounded-full border-2 border-white shadow-lg tracking-dot"></div>
+                                <div class="absolute top-1/3 left-1/2 w-4 h-4 bg-green-500 rounded-full border-2 border-white shadow-lg tracking-dot" style="animation-delay: 0.5s"></div>
+                                <div class="absolute bottom-1/3 right-1/4 w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-lg tracking-dot" style="animation-delay: 1s"></div>
+                                <div class="absolute top-1/2 right-1/3 w-4 h-4 bg-purple-500 rounded-full border-2 border-white shadow-lg tracking-dot" style="animation-delay: 1.5s"></div>
+                            </div>
+                            
+                            <!-- Vehicle List -->
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-truck text-track-red"></i>
+                                        <span>BV23 XYZ</span>
+                                    </div>
+                                    <span class="text-green-600 font-medium">Moving • 56 mph</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-van-shuttle text-blue-500"></i>
+                                        <span>YT22 ABC</span>
+                                    </div>
+                                    <span class="text-gray-400">Stationary</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-car text-green-500"></i>
+                                        <span>MA21 DEF</span>
+                                    </div>
+                                    <span class="text-green-600 font-medium">Moving • 42 mph</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="py-20 lg:py-32 bg-track-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl lg:text-5xl font-black text-track-black mb-4">Tracking Solutions</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    From smaller owner/driver companies to large scale logistics operations. 
+                    We have a solution to suit all fleet sizes.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- ERA Lite -->
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden reveal">
+                    <div class="bg-gradient-to-r from-gray-600 to-gray-700 p-6 text-white">
+                        <div class="text-sm font-semibold opacity-80 mb-1">Entry Level</div>
+                        <h3 class="text-2xl font-black">ERA Lite</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">
+                            Our most affordable tracking solution, specifically designed for smaller fleet operators.
+                        </p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Real-time GPS tracking</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Journey history & reports</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Geofencing alerts</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Mobile app access</span>
+                            </li>
+                        </ul>
+                        <a href="#" class="block w-full text-center border-2 border-track-red text-track-red hover:bg-track-red hover:text-white py-3 rounded-lg font-semibold transition-all">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- ERA Essentials - Featured -->
+                <div class="product-card bg-white rounded-2xl shadow-xl overflow-hidden transform scale-105 border-2 border-track-red reveal">
+                    <div class="bg-track-red p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-sm font-semibold opacity-90 mb-1">Most Popular</div>
+                                <h3 class="text-2xl font-black">ERA Essentials</h3>
+                            </div>
+                            <div class="bg-white/20 px-3 py-1 rounded-full text-sm font-bold">AWARD WINNING</div>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">
+                            Our award-winning solution for the larger SME market with expanded features.
+                        </p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span><strong>Everything in Lite, plus:</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Expanded reporting suite</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Driver ID compatibility</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Business/Private buttons</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Advanced alerts & notifications</span>
+                            </li>
+                        </ul>
+                        <a href="#" class="block w-full text-center bg-track-red hover:bg-track-red-dark text-white py-3 rounded-lg font-semibold transition-all">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- ERA Advanced -->
+                <div class="product-card bg-white rounded-2xl shadow-lg overflow-hidden reveal">
+                    <div class="bg-gradient-to-r from-track-black to-track-gray p-6 text-white">
+                        <div class="text-sm font-semibold opacity-80 mb-1">Enterprise</div>
+                        <h3 class="text-2xl font-black">ERA Advanced</h3>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-6">
+                            Our most advanced solution with tachograph integration and fuel monitoring.
+                        </p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span><strong>Everything in Essentials, plus:</strong></span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Tachograph remote download</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>CanBus fuel reporting</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span>Advanced fleet analytics</span>
+                            </li>
+                        </ul>
+                        <a href="#" class="block w-full text-center border-2 border-track-black text-track-black hover:bg-track-black hover:text-white py-3 rounded-lg font-semibold transition-all">
+                            Learn More
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10 Reasons Section -->
+    <section class="py-20 lg:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl lg:text-5xl font-black text-track-black mb-4">10 Reasons to Choose Trackitnow</h2>
+                <p class="text-xl text-gray-600">Why we're the trusted choice for fleet management</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Reason 1 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">Award Winning</h3>
+                    <p class="text-gray-600 text-sm">Regular updates at no additional cost. All services developed in-house.</p>
+                </div>
+                
+                <!-- Reason 2 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">Web & Mobile Access</h3>
+                    <p class="text-gray-600 text-sm">ERA portal works on any browser. Free iOS & Android apps included.</p>
+                </div>
+                
+                <!-- Reason 3 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">UK Roaming SIMs</h3>
+                    <p class="text-gray-600 text-sm">Full UK roaming using all major networks for best possible coverage.</p>
+                </div>
+                
+                <!-- Reason 4 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">Lifetime Warranty</h3>
+                    <p class="text-gray-600 text-sm">Lifetime parts & labour warranty on all rental devices. No hidden costs.</p>
+                </div>
+                
+                <!-- Reason 5 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-pound-sign"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">No Hidden Fees</h3>
+                    <p class="text-gray-600 text-sm">No documentation, connection, or airtime fees. Fixed pricing for your term.</p>
+                </div>
+                
+                <!-- Reason 6 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">6 Years Data Access</h3>
+                    <p class="text-gray-600 text-sm">Historic data retained for 6 years at no extra cost. Access anytime.</p>
+                </div>
+                
+                <!-- Reason 7 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">Scalable Solutions</h3>
+                    <p class="text-gray-600 text-sm">Upgrade anytime without early cancellation fees as your business grows.</p>
+                </div>
+                
+                <!-- Reason 8 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">Competitive Service</h3>
+                    <p class="text-gray-600 text-sm">Service work pricing almost half that of larger tracking providers.</p>
+                </div>
+                
+                <!-- Reason 9 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">Personal Service</h3>
+                    <p class="text-gray-600 text-sm">Established 2008. Small friendly team. Same contact every time.</p>
+                </div>
+                
+                <!-- Reason 10 -->
+                <div class="reveal bg-track-light rounded-xl p-6 hover:shadow-lg transition-all hover:-translate-y-1 md:col-span-2 lg:col-span-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-track-black mb-2">UK & Ireland Network</h3>
+                    <p class="text-gray-600 text-sm">Engineer network throughout UK & Ireland. Installations anywhere, minimising downtime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-16 bg-track-red">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-black text-white mb-2 counter" data-target="99.9" data-suffix="%">0</div>
+                    <div class="text-white/80">Service Uptime</div>
+                </div>
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-black text-white mb-2 counter" data-target="2008">0</div>
+                    <div class="text-white/80">Year Established</div>
+                </div>
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-black text-white mb-2 counter" data-target="6" data-suffix="+">0</div>
+                    <div class="text-white/80">Years Data Retention</div>
+                </div>
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-black text-white mb-2">UK &amp; IE</div>
+                    <div class="text-white/80">Full Coverage</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="demo" class="py-20 lg:py-32 bg-track-black">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <h2 class="text-3xl lg:text-5xl font-black text-white mb-6">Ready to Transform Your Fleet?</h2>
+            <p class="text-xl text-gray-400 mb-8">
+                See Trackitnow in action. Request a personalised demo tailored to your business needs.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#" class="bg-track-red hover:bg-track-red-dark text-white px-10 py-4 rounded-full font-bold text-lg transition-all hover:shadow-xl hover:scale-105">
+                    <i class="fas fa-calendar-check mr-2"></i> Request a Demo
+                </a>
+                <a href="tel:0800000000" class="border-2 border-white text-white hover:bg-white hover:text-track-black px-10 py-4 rounded-full font-bold text-lg transition-all">
+                    <i class="fas fa-phone mr-2"></i> Call Us Now
+                </a>
+            </div>
+            <p class="mt-6 text-gray-500 text-sm">Free consultation • No obligation • Expert advice</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-track-gray text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
+                <!-- Brand -->
+                <div class="lg:col-span-2">
+                    <div class="bg-track-red text-white font-black text-2xl px-3 py-1 rounded tracking-tighter inline-block mb-4">
+                        TRACKIT<span class="text-track-black">NOW</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        GPS Vehicle Tracking, Monitoring and Locating solutions for businesses across the UK & Ireland since 2008.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <!-- Products -->
+                <div>
+                    <h4 class="font-bold mb-4">Products</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-track-red transition-colors">ERA Lite</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">ERA Essentials</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">ERA Advanced</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">Remote Tachograph</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">CanBus Integration</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Solutions -->
+                <div>
+                    <h4 class="font-bold mb-4">Solutions</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-track-red transition-colors">HGV Tracking</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">Van Tracking</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">Car Tracking</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">Fleet Management</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">Driver ID</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Company -->
+                <div>
+                    <h4 class="font-bold mb-4">Company</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-track-red transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">Case Studies</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-track-red transition-colors">Support</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">
+                    © 2024 Trackitnow Ltd. All rights reserved.
+                </p>
+                <div class="flex space-x-6 text-sm text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+        
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+        
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, index * 100);
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+        
+        // Counter Animation
+        const counters = document.querySelectorAll('.counter');
+        
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = parseFloat(counter.dataset.target);
+                    const suffix = counter.dataset.suffix || '';
+                    const duration = 2000;
+                    const step = target / (duration / 16);
+                    let current = 0;
+                    
+                    const updateCounter = () => {
+                        current += step;
+                        if (current < target) {
+                            counter.textContent = (target % 1 === 0 ? Math.floor(current) : current.toFixed(1)) + suffix;
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.textContent = target + suffix;
+                        }
+                    };
+                    
+                    updateCounter();
+                    counterObserver.unobserve(counter);
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        counters.forEach(counter => counterObserver.observe(counter));
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        });
+        
+        // Header scroll effect
+        const header = document.querySelector('header');
+        let lastScroll = 0;
+        
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.classList.add('shadow-lg');
+            } else {
+                header.classList.remove('shadow-lg');
+            }
+            
+            lastScroll = currentScroll;
+        });
+    </script>
+</body>
+</html>
