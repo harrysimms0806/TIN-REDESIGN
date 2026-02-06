@@ -11,11 +11,14 @@
             theme: {
                 extend: {
                     colors: {
+                        'track-green': '#1B5E20',
+                        'track-green-dark': '#0D3B10',
+                        'track-green-light': '#2E7D32',
+                        'track-green-pale': '#E8F5E9',
                         'track-red': '#E31837',
                         'track-red-dark': '#B31229',
                         'track-black': '#1A1A1A',
                         'track-gray': '#333333',
-                        'track-light': '#F5F5F5',
                     },
                     animation: {
                         'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
@@ -25,8 +28,8 @@
                     },
                     keyframes: {
                         pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 20px rgba(227, 24, 55, 0.3)' },
-                            '50%': { boxShadow: '0 0 40px rgba(227, 24, 55, 0.6)' },
+                            '0%, 100%': { boxShadow: '0 0 20px rgba(227, 24, 55, 0.4)' },
+                            '50%': { boxShadow: '0 0 40px rgba(227, 24, 55, 0.7)' },
                         },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
@@ -53,7 +56,11 @@
         }
         
         .hero-gradient {
-            background: linear-gradient(135deg, #1A1A1A 0%, #333333 50%, #1A1A1A 100%);
+            background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #1B5E20 100%);
+        }
+        
+        .section-green {
+            background: linear-gradient(180deg, #1B5E20 0%, #0D3B10 100%);
         }
         
         .card-hover {
@@ -62,7 +69,7 @@
         
         .card-hover:hover {
             transform: translateY(-12px);
-            box-shadow: 0 20px 40px rgba(227, 24, 55, 0.15), 0 0 60px rgba(227, 24, 55, 0.1);
+            box-shadow: 0 20px 40px rgba(227, 24, 55, 0.2), 0 0 60px rgba(227, 24, 55, 0.15);
         }
         
         .nav-link {
@@ -98,22 +105,14 @@
         }
         
         .vehicle-path {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: drawPath 3s ease-out forwards;
+            stroke-dasharray: 10;
+            animation: dash 20s linear infinite;
         }
         
-        @keyframes drawPath {
-            to { stroke-dashoffset: 0; }
-        }
-        
-        .vehicle-dot {
-            animation: moveAlongPath 3s ease-out forwards;
-        }
-        
-        @keyframes moveAlongPath {
-            0% { offset-distance: 0%; }
-            100% { offset-distance: 100%; }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -1000;
+            }
         }
         
         .reveal {
@@ -127,848 +126,607 @@
             transform: translateY(0);
         }
         
-        .counter {
-            font-variant-numeric: tabular-nums;
+        .tracking-pulse {
+            animation: trackingPulse 2s ease-in-out infinite;
         }
         
-        .mobile-menu {
-            transform: translateX(100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        @keyframes trackingPulse {
+            0%, 100% { 
+                transform: scale(1); 
+                box-shadow: 0 0 0 0 rgba(227, 24, 55, 0.7);
+            }
+            50% { 
+                transform: scale(1.1); 
+                box-shadow: 0 0 20px 10px rgba(227, 24, 55, 0);
+            }
         }
         
-        .mobile-menu.open {
-            transform: translateX(0);
+        .cta-glow {
+            animation: ctaGlow 2s ease-in-out infinite;
         }
         
-        .logo-pulse:hover {
-            animation: logoPulse 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes logoPulse {
-            0%, 100% { filter: drop-shadow(0 0 5px rgba(227, 24, 55, 0.3)); }
-            50% { filter: drop-shadow(0 0 20px rgba(227, 24, 55, 0.8)); }
-        }
-        
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-        }
-        
-        .gradient-text {
-            background: linear-gradient(135deg, #E31837 0%, #B31229 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .reason-card {
-            transition: all 0.3s ease;
-        }
-        
-        .reason-card:hover {
-            background: linear-gradient(135deg, #E31837 0%, #B31229 100%);
-            color: white;
-            transform: scale(1.05);
-        }
-        
-        .reason-card:hover .reason-icon {
-            color: white;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #E31837 0%, #B31229 100%);
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(227, 24, 55, 0.4);
-        }
-        
-        .uk-map {
-            filter: drop-shadow(0 0 30px rgba(227, 24, 55, 0.2));
+        @keyframes ctaGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(227, 24, 55, 0.4); }
+            50% { box-shadow: 0 0 50px rgba(227, 24, 55, 0.7); }
         }
     </style>
 </head>
-<body class="bg-track-light text-track-gray">
+<body class="bg-track-green-dark text-white">
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 glass-effect border-b border-gray-200">
-        <div class="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
-            <div class="flex items-center justify-between h-20">
+    <header class="fixed w-full top-0 z-50 bg-track-green/95 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
                 <!-- Logo -->
-                <a href="#" class="logo-pulse flex items-center gap-3">
-                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center">
-                        <i class="fas fa-satellite-dish text-white text-xl"></i>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-2xl font-bold text-track-black tracking-tight">TRACKIT<span class="text-track-red">NOW</span></span>
-                        <span class="text-xs text-track-gray tracking-widest">VEHICLE TRACKING</span>
+                <a href="#" class="flex items-center space-x-2 group">
+                    <div class="bg-white text-track-green font-black text-2xl px-4 py-2 rounded-lg tracking-tighter group-hover:shadow-lg transition-all">
+                        TRACKIT<span class="text-track-red">NOW</span>
                     </div>
                 </a>
-
+                
                 <!-- Desktop Navigation -->
-                <nav class="hidden xl:flex items-center gap-8">
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Home</a>
+                <nav class="hidden lg:flex items-center space-x-6">
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">Home</a>
                     
                     <div class="dropdown relative">
-                        <button class="nav-link flex items-center gap-1 text-track-gray hover:text-track-red font-medium transition-colors">
-                            Vehicle Tracking
-                            <i class="fas fa-chevron-down text-xs"></i>
-                        </button>
-                        <div class="dropdown-menu absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-100 py-2">
-                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-light hover:text-track-red transition-colors">ERA Lite</a>
-                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-light hover:text-track-red transition-colors">ERA Essentials</a>
-                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-light hover:text-track-red transition-colors">ERA Advanced</a>
-                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-light hover:text-track-red transition-colors">Remote Tachograph</a>
-                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-light hover:text-track-red transition-colors">CanBus Integration</a>
+                        <a href="#products" class="nav-link text-white/90 hover:text-white font-medium transition-colors flex items-center">
+                            Vehicle Tracking <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                        </a>
+                        <div class="dropdown-menu absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-2xl py-2 z-50">
+                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-green-pale hover:text-track-green transition-colors">ERA Lite</a>
+                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-green-pale hover:text-track-green transition-colors">ERA Essentials</a>
+                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-green-pale hover:text-track-green transition-colors">ERA Advanced</a>
+                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-green-pale hover:text-track-green transition-colors">Remote Tachograph</a>
+                            <a href="#" class="block px-4 py-2 text-track-gray hover:bg-track-green-pale hover:text-track-green transition-colors">CanBus Integration</a>
                         </div>
                     </div>
                     
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">HGV</a>
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Accessories</a>
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Industries</a>
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Case Studies</a>
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">News</a>
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">About</a>
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Contact</a>
-                    <a href="#" class="nav-link text-track-gray hover:text-track-red font-medium transition-colors">Support</a>
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">HGV</a>
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">Accessories</a>
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">Industries</a>
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">Case Studies</a>
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">News</a>
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">About</a>
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">Contact</a>
+                    <a href="#" class="nav-link text-white/90 hover:text-white font-medium transition-colors">Support</a>
                 </nav>
-
-                <!-- Login Button -->
-                <div class="hidden xl:flex items-center gap-4">
-                    <a href="#" class="flex items-center gap-2 text-track-red font-semibold hover:text-track-red-dark transition-colors">
-                        <i class="fas fa-user-circle text-lg"></i>
-                        Login
+                
+                <!-- Login & CTA -->
+                <div class="hidden lg:flex items-center space-x-4">
+                    <a href="#" class="text-white/90 hover:text-white font-medium transition-colors">Login</a>
+                    <a href="#demo" class="bg-track-red hover:bg-track-red-dark text-white px-6 py-2.5 rounded-full font-bold transition-all hover:shadow-lg hover:scale-105 cta-glow">
+                        Request a Demo
                     </a>
                 </div>
-
+                
                 <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="xl:hidden text-track-gray hover:text-track-red transition-colors">
+                <button id="mobile-menu-btn" class="lg:hidden text-white hover:text-track-red transition-colors">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
         </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="fixed inset-0 bg-track-green-dark z-50 transform translate-x-full transition-transform duration-300 lg:hidden">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-8">
+                    <div class="bg-white text-track-green font-black text-xl px-3 py-1 rounded">
+                        TRACKIT<span class="text-track-red">NOW</span>
+                    </div>
+                    <button id="close-menu" class="text-white hover:text-track-red">
+                        <i class="fas fa-times text-2xl"></i>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">Home</a>
+                    <a href="#products" class="block text-lg font-medium text-white hover:text-track-red">Vehicle Tracking</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">HGV</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">Accessories</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">Industries</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">Case Studies</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">News</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">About</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">Contact</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">Support</a>
+                    <a href="#" class="block text-lg font-medium text-white hover:text-track-red">Login</a>
+                    <a href="#demo" class="block bg-track-red text-white text-center py-3 rounded-lg font-bold mt-6">Request a Demo</a>
+                </nav>
+            </div>
+        </div>
     </header>
 
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" class="mobile-menu fixed inset-y-0 right-0 w-80 bg-white z-50 shadow-2xl xl:hidden">
-        <div class="p-6">
-            <div class="flex items-center justify-between mb-8">
-                <span class="text-xl font-bold text-track-black">Menu</span>
-                <button id="closeMobileMenu" class="text-track-gray hover:text-track-red transition-colors">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-            </div>
-            <nav class="flex flex-col gap-4">
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">Home</a>
-                <details class="group">
-                    <summary class="flex items-center justify-between text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100 cursor-pointer list-none">
-                        Vehicle Tracking
-                        <i class="fas fa-chevron-down text-xs transition-transform group-open:rotate-180"></i>
-                    </summary>
-                    <div class="pl-4 py-2 flex flex-col gap-2">
-                        <a href="#" class="text-sm text-track-gray hover:text-track-red py-1">ERA Lite</a>
-                        <a href="#" class="text-sm text-track-gray hover:text-track-red py-1">ERA Essentials</a>
-                        <a href="#" class="text-sm text-track-gray hover:text-track-red py-1">ERA Advanced</a>
-                        <a href="#" class="text-sm text-track-gray hover:text-track-red py-1">Remote Tachograph</a>
-                        <a href="#" class="text-sm text-track-gray hover:text-track-red py-1">CanBus Integration</a>
-                    </div>
-                </details>
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">HGV</a>
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">Accessories</a>
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">Industries</a>
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">Case Studies</a>
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">News</a>
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">About</a>
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">Contact</a>
-                <a href="#" class="text-track-gray hover:text-track-red font-medium py-2 border-b border-gray-100">Support</a>
-                <a href="#" class="flex items-center gap-2 text-track-red font-semibold py-2">
-                    <i class="fas fa-user-circle"></i>
-                    Login
-                </a>
-            </nav>
-        </div>
-    </div>
-
     <!-- Hero Section -->
-    <section class="hero-gradient min-h-screen flex items-center pt-20 relative overflow-hidden">
-        <!-- Animated Background Elements -->
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute top-20 left-10 w-72 h-72 bg-track-red rounded-full blur-3xl animate-pulse"></div>
-            <div class="absolute bottom-20 right-10 w-96 h-96 bg-track-red rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+    <section class="relative pt-32 pb-20 lg:pt-40 lg:pb-32 hero-gradient overflow-hidden">
+        <!-- Animated Background -->
+        <div class="absolute inset-0">
+            <svg class="w-full h-full opacity-20" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice">
+                <!-- UK Map Outline -->
+                <path d="M400,200 L450,180 L500,190 L550,170 L600,180 L650,160 L700,170 L720,200 L710,250 L680,280 L650,300 L600,320 L550,310 L500,330 L450,320 L420,300 L400,280 L380,250 Z" 
+                      fill="none" stroke="white" stroke-width="2" class="vehicle-path"/>
+                
+                <!-- Animated Vehicle Dots -->
+                <circle r="6" fill="#E31837">
+                    <animateMotion dur="8s" repeatCount="indefinite" path="M400,200 L450,180 L500,190 L550,170 L600,180"/>
+                </circle>
+                <circle r="6" fill="white">
+                    <animateMotion dur="10s" repeatCount="indefinite" path="M550,170 L600,180 L650,160 L700,170 L720,200"/>
+                </circle>
+                <circle r="6" fill="#E31837">
+                    <animateMotion dur="12s" repeatCount="indefinite" path="M500,330 L550,310 L600,320 L650,300 L680,280"/>
+                </circle>
+            </svg>
         </div>
-
-        <div class="w-full px-4 sm:px-6 lg:px-12 xl:px-20 py-20 relative z-10">
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
-                <!-- Hero Content -->
-                <div class="text-white space-y-8">
-                    <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20">
-                        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-                        <span class="text-sm font-medium">Trusted by 10,000+ UK Businesses</span>
+                <div class="reveal">
+                    <div class="inline-flex items-center bg-track-red/20 border border-track-red/30 text-white px-4 py-2 rounded-full text-sm font-bold mb-6">
+                        <i class="fas fa-award mr-2 text-track-red"></i> Award Winning Fleet Solutions
                     </div>
-                    
-                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+                    <h1 class="text-4xl lg:text-6xl font-black leading-tight mb-6">
                         GPS Vehicle Tracking,<br>
-                        <span class="text-track-red">Monitoring</span> and Locating
+                        <span class="text-track-red">Monitoring</span> & Locating
                     </h1>
-                    
-                    <p class="text-lg text-gray-300 max-w-xl">
-                        Real-time fleet tracking solutions for businesses of all sizes. Monitor your vehicles, optimise routes, reduce costs, and improve driver safety with our cutting-edge ERA platform.
+                    <p class="text-xl text-white/80 mb-8 leading-relaxed">
+                        Complete fleet management solutions for businesses of all sizes. 
+                        From owner-drivers to large-scale logistics operations.
                     </p>
-                    
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#products" class="btn-primary px-8 py-4 rounded-full text-white font-semibold flex items-center gap-2">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#products" class="bg-track-red hover:bg-track-red-dark text-white px-8 py-4 rounded-full font-bold text-lg transition-all hover:shadow-xl hover:scale-105 text-center cta-glow">
                             Explore Solutions
-                            <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="#demo" class="px-8 py-4 rounded-full border-2 border-white/30 text-white font-semibold hover:bg-white/10 transition-colors flex items-center gap-2">
-                            <i class="fas fa-play-circle"></i>
-                            Watch Demo
+                        <a href="#demo" class="border-2 border-white text-white hover:bg-white hover:text-track-green px-8 py-4 rounded-full font-bold text-lg transition-all text-center">
+                            Request a Demo
                         </a>
                     </div>
                     
-                    <div class="flex items-center gap-6 pt-4">
-                        <div class="flex -space-x-3">
-                            <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Customer" class="w-10 h-10 rounded-full border-2 border-track-black">
-                            <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Customer" class="w-10 h-10 rounded-full border-2 border-track-black">
-                            <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Customer" class="w-10 h-10 rounded-full border-2 border-track-black">
-                            <img src="https://randomuser.me/api/portraits/women/4.jpg" alt="Customer" class="w-10 h-10 rounded-full border-2 border-track-black">
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/20">
+                        <div>
+                            <div class="text-3xl font-black text-track-red counter" data-target="99.9" data-suffix="%">0</div>
+                            <div class="text-sm text-white/70">Uptime</div>
                         </div>
                         <div>
-                            <div class="flex items-center gap-1 text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <p class="text-sm text-gray-400">4.9/5 from 500+ reviews</p>
+                            <div class="text-3xl font-black text-track-red counter" data-target="2008">0</div>
+                            <div class="text-sm text-white/70">Established</div>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-black text-track-red counter" data-target="6" data-suffix="+">0</div>
+                            <div class="text-sm text-white/70">Years Data</div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Hero Visual - UK Map with Tracking -->
-                <div class="relative">
-                    <div class="relative bg-track-black/50 rounded-3xl p-8 border border-white/10 backdrop-blur-sm">
-                        <!-- UK Map SVG -->
-                        <svg viewBox="0 0 400 500" class="w-full h-auto uk-map">
-                            <!-- Simplified UK Map Outline -->
-                            <path d="M180 80 
-                                     C160 70, 140 80, 130 100
-                                     C120 120, 110 140, 100 160
-                                     C90 180, 80 200, 70 220
-                                     C60 240, 50 260, 60 280
-                                     C70 300, 90 310, 110 305
-                                     C130 300, 150 295, 170 290
-                                     C190 285, 210 280, 230 285
-                                     C250 290, 270 300, 280 320
-                                     C290 340, 285 360, 270 375
-                                     C255 390, 240 400, 220 405
-                                     C200 410, 180 405, 170 390
-                                     C160 375, 165 360, 175 345
-                                     C185 330, 195 315, 200 300
-                                     C205 285, 200 270, 190 260
-                                     C180 250, 170 245, 160 240
-                                     L180 80" 
-                                  fill="none" stroke="#E31837" stroke-width="3" opacity="0.3"/>
-                            
-                            <!-- Animated Vehicle Paths -->
-                            <!-- London to Manchester -->
-                            <path class="vehicle-path" d="M220 400 C210 380, 200 360, 190 340 C185 320, 180 300, 175 280 C170 260, 165 240, 160 220" 
-                                  fill="none" stroke="#E31837" stroke-width="2" stroke-linecap="round"/>
-                            
-                            <!-- Birmingham to Edinburgh -->
-                            <path class="vehicle-path" d="M170 290 C165 270, 160 250, 155 230 C150 210, 145 190, 140 170 C135 150, 130 130, 135 110" 
-                                  fill="none" stroke="#E31837" stroke-width="2" stroke-linecap="round" style="animation-delay: 0.5s;"/>
-                            
-                            <!-- Cardiff to Leeds -->
-                            <path class="vehicle-path" d="M140 350 C145 330, 150 310, 155 290 C160 270, 165 250, 170 230" 
-                                  fill="none" stroke="#E31837" stroke-width="2" stroke-linecap="round" style="animation-delay: 1s;"/>
-                            
-                            <!-- Vehicle Dots -->
-                            <circle r="6" fill="#E31837" filter="url(#glow)">
-                                <animateMotion dur="3s" repeatCount="indefinite" path="M220 400 C210 380, 200 360, 190 340 C185 320, 180 300, 175 280 C170 260, 165 240, 160 220"/>
-                            </circle>
-                            <circle r="6" fill="#E31837" filter="url(#glow)">
-                                <animateMotion dur="3s" repeatCount="indefinite" begin="0.5s" path="M170 290 C165 270, 160 250, 155 230 C150 210, 145 190, 140 170 C135 150, 130 130, 135 110"/>
-                            </circle>
-                            <circle r="6" fill="#E31837" filter="url(#glow)">
-                                <animateMotion dur="3s" repeatCount="indefinite" begin="1s" path="M140 350 C145 330, 150 310, 155 290 C160 270, 165 250, 170 230"/>
-                            </circle>
-                            
-                            <!-- Glow Filter -->
-                            <defs>
-                                <filter id="glow">
-                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-                                    <feMerge>
-                                        <feMergeNode in="coloredBlur"/>
-                                        <feMergeNode in="SourceGraphic"/>
-                                    </feMerge>
-                                </filter>
-                            </defs>
-                            
-                            <!-- City Markers -->
-                            <circle cx="220" cy="400" r="8" fill="#E31837" opacity="0.8"/>
-                            <text x="230" y="405" fill="white" font-size="10" font-weight="bold">London</text>
-                            
-                            <circle cx="160" cy="220" r="6" fill="#E31837" opacity="0.8"/>
-                            <text x="120" y="225" fill="white" font-size="9">Manchester</text>
-                            
-                            <circle cx="135" cy="110" r="6" fill="#E31837" opacity="0.8"/>
-                            <text x="145" y="115" fill="white" font-size="9">Edinburgh</text>
-                            
-                            <circle cx="170" cy="290" r="6" fill="#E31837" opacity="0.8"/>
-                            <text x="180" y="295" fill="white" font-size="9">Birmingham</text>
-                            
-                            <circle cx="140" cy="350" r="6" fill="#E31837" opacity="0.8"/>
-                            <text x="90" y="355" fill="white" font-size="9">Cardiff</text>
-                        </svg>
-                        
-                        <!-- Stats Overlay -->
-                        <div class="absolute bottom-4 left-4 right-4 bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-                            <div class="grid grid-cols-3 gap-4 text-center">
-                                <div>
-                                    <div class="text-2xl font-bold text-track-red counter" data-target="15000">0</div>
-                                    <div class="text-xs text-gray-400">Vehicles Tracked</div>
+                
+                <!-- Hero Visual -->
+                <div class="relative animate-float reveal">
+                    <div class="relative bg-white/10 backdrop-blur-sm rounded-3xl p-6 border border-white/20">
+                        <div class="bg-white rounded-2xl shadow-2xl p-6 text-track-gray">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-track-green rounded-full tracking-pulse"></div>
+                                    <span class="font-bold">Live Fleet Tracking</span>
                                 </div>
-                                <div>
-                                    <div class="text-2xl font-bold text-track-red counter" data-target="99.9" data-decimal="true">0</div>
-                                    <div class="text-xs text-gray-400">% Uptime</div>
+                                <span class="text-xs text-gray-500">42 vehicles active</span>
+                            </div>
+                            
+                            <div class="bg-track-green-pale rounded-xl h-48 relative overflow-hidden">
+                                <div class="absolute inset-0 opacity-40">
+                                    <svg viewBox="0 0 400 200" class="w-full h-full">
+                                        <path d="M50,100 Q100,50 150,80 T250,70 T350,100" fill="none" stroke="#1B5E20" stroke-width="2"/>
+                                        <path d="M30,120 Q80,150 130,130 T230,140 T330,120" fill="none" stroke="#1B5E20" stroke-width="2"/>
+                                    </svg>
                                 </div>
-                                <div>
-                                    <div class="text-2xl font-bold text-track-red counter" data-target="24">0</div>
-                                    <div class="text-xs text-gray-400">/7 Support</div>
+                                <div class="absolute top-1/4 left-1/4 w-4 h-4 bg-track-red rounded-full border-2 border-white shadow-lg tracking-pulse"></div>
+                                <div class="absolute top-1/3 left-1/2 w-4 h-4 bg-track-green rounded-full border-2 border-white shadow-lg tracking-pulse" style="animation-delay: 0.5s"></div>
+                                <div class="absolute bottom-1/3 right-1/4 w-4 h-4 bg-track-red rounded-full border-2 border-white shadow-lg tracking-pulse" style="animation-delay: 1s"></div>
+                            </div>
+                            
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-truck text-track-red"></i>
+                                        <span>BV23 XYZ</span>
+                                    </div>
+                                    <span class="text-track-green font-bold">Moving • 56 mph</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <div class="flex items-center space-x-2">
+                                        <i class="fas fa-van-shuttle text-track-green"></i>
+                                        <span>YT22 ABC</span>
+                                    </div>
+                                    <span class="text-gray-400">Stationary</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/50 animate-bounce">
-            <i class="fas fa-chevron-down text-2xl"></i>
         </div>
     </section>
 
-    <!-- Product Tiers Section -->
-    <section id="products" class="py-24 bg-white">
-        <div class="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
-            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
-                <span class="text-track-red font-semibold text-sm uppercase tracking-wider">Our Solutions</span>
-                <h2 class="text-4xl lg:text-5xl font-bold text-track-black mt-4 mb-6">
-                    Choose Your <span class="gradient-text">ERA Package</span>
-                </h2>
-                <p class="text-track-gray text-lg">
-                    From essential tracking to advanced fleet management, we have a solution that fits your business needs and budget.
+    <!-- Products Section -->
+    <section id="products" class="py-20 lg:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl lg:text-5xl font-black text-track-green mb-4">Tracking Solutions</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    From smaller owner/driver companies to large scale logistics operations.
                 </p>
             </div>
-
+            
             <div class="grid md:grid-cols-3 gap-8">
                 <!-- ERA Lite -->
-                <div class="card-hover bg-track-light rounded-3xl p-8 border border-gray-200 reveal">
-                    <div class="w-14 h-14 bg-track-red/10 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-location-arrow text-track-red text-2xl"></i>
+                <div class="card-hover bg-track-green-pale rounded-2xl overflow-hidden reveal">
+                    <div class="bg-track-green p-6 text-white">
+                        <div class="text-sm font-semibold opacity-80 mb-1">Entry Level</div>
+                        <h3 class="text-2xl font-black">ERA Lite</h3>
                     </div>
-                    <h3 class="text-2xl font-bold text-track-black mb-2">ERA Lite</h3>
-                    <p class="text-track-gray mb-6">Perfect for small businesses getting started with vehicle tracking.</p>
-                    <div class="text-4xl font-bold text-track-black mb-2">£12<span class="text-lg font-normal text-track-gray">/month</span></div>
-                    <p class="text-sm text-track-gray mb-8">per vehicle</p>
-                    
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Real-time GPS tracking
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Mobile app access
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Journey history (3 months)
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Geofence alerts
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Email reports
-                        </li>
-                    </ul>
-                    
-                    <button class="w-full py-4 rounded-full border-2 border-track-red text-track-red font-semibold hover:bg-track-red hover:text-white transition-colors">
-                        Get Started
-                    </button>
+                    <div class="p-6">
+                        <p class="text-track-gray mb-6">Our most affordable solution for smaller fleet operators.</p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Real-time GPS tracking</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Journey history & reports</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Geofencing alerts</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Mobile app access</span>
+                            </li>
+                        </ul>
+                        <a href="#" class="block w-full text-center bg-track-green hover:bg-track-green-dark text-white py-3 rounded-lg font-bold transition-all">
+                            Learn More
+                        </a>
+                    </div>
                 </div>
-
-                <!-- ERA Essentials -->
-                <div class="card-hover bg-track-black rounded-3xl p-8 relative overflow-hidden reveal" style="animation-delay: 0.2s;">
-                    <div class="absolute top-0 right-0 bg-track-red text-white text-xs font-bold px-4 py-2 rounded-bl-xl">
-                        MOST POPULAR
+                
+                <!-- ERA Essentials - Featured -->
+                <div class="card-hover bg-white rounded-2xl shadow-2xl overflow-hidden transform scale-105 border-4 border-track-red reveal">
+                    <div class="bg-track-red p-6 text-white">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-sm font-semibold opacity-90 mb-1">Most Popular</div>
+                                <h3 class="text-2xl font-black">ERA Essentials</h3>
+                            </div>
+                            <div class="bg-white/20 px-3 py-1 rounded-full text-xs font-bold">AWARD WINNING</div>
+                        </div>
                     </div>
-                    <div class="w-14 h-14 bg-track-red rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-satellite text-white text-2xl"></i>
+                    <div class="p-6">
+                        <p class="text-track-gray mb-6">Our award-winning solution for the larger SME market.</p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray font-bold">Everything in Lite, plus:</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Expanded reporting suite</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Driver ID compatibility</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Business/Private buttons</span>
+                            </li>
+                        </ul>
+                        <a href="#" class="block w-full text-center bg-track-red hover:bg-track-red-dark text-white py-3 rounded-lg font-bold transition-all">
+                            Learn More
+                        </a>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-2">ERA Essentials</h3>
-                    <p class="text-gray-400 mb-6">Complete fleet management for growing businesses.</p>
-                    <div class="text-4xl font-bold text-white mb-2">£18<span class="text-lg font-normal text-gray-400">/month</span></div>
-                    <p class="text-sm text-gray-400 mb-8">per vehicle</p>
-                    
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center gap-3 text-gray-300">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Everything in Lite, plus:
-                        </li>
-                        <li class="flex items-center gap-3 text-gray-300">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Advanced reporting suite
-                        </li>
-                        <li class="flex items-center gap-3 text-gray-300">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Driver behaviour monitoring
-                        </li>
-                        <li class="flex items-center gap-3 text-gray-300">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Journey history (12 months)
-                        </li>
-                        <li class="flex items-center gap-3 text-gray-300">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            API access
-                        </li>
-                        <li class="flex items-center gap-3 text-gray-300">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Priority support
-                        </li>
-                    </ul>
-                    
-                    <button class="w-full py-4 rounded-full bg-track-red text-white font-semibold hover:bg-track-red-dark transition-colors">
-                        Get Started
-                    </button>
                 </div>
-
+                
                 <!-- ERA Advanced -->
-                <div class="card-hover bg-track-light rounded-3xl p-8 border border-gray-200 reveal" style="animation-delay: 0.4s;">
-                    <div class="w-14 h-14 bg-track-red/10 rounded-2xl flex items-center justify-center mb-6">
-                        <i class="fas fa-crown text-track-red text-2xl"></i>
+                <div class="card-hover bg-track-green-pale rounded-2xl overflow-hidden reveal">
+                    <div class="bg-track-green-dark p-6 text-white">
+                        <div class="text-sm font-semibold opacity-80 mb-1">Enterprise</div>
+                        <h3 class="text-2xl font-black">ERA Advanced</h3>
                     </div>
-                    <h3 class="text-2xl font-bold text-track-black mb-2">ERA Advanced</h3>
-                    <p class="text-track-gray mb-6">Enterprise-grade solution with full integration capabilities.</p>
-                    <div class="text-4xl font-bold text-track-black mb-2">Custom</div>
-                    <p class="text-sm text-track-gray mb-8">tailored pricing</p>
-                    
-                    <ul class="space-y-4 mb-8">
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Everything in Essentials, plus:
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            CanBus integration
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Remote tachograph download
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Temperature monitoring
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Custom integrations
-                        </li>
-                        <li class="flex items-center gap-3 text-track-gray">
-                            <i class="fas fa-check-circle text-track-red"></i>
-                            Dedicated account manager
-                        </li>
-                    </ul>
-                    
-                    <button class="w-full py-4 rounded-full border-2 border-track-red text-track-red font-semibold hover:bg-track-red hover:text-white transition-colors">
-                        Contact Sales
-                    </button>
+                    <div class="p-6">
+                        <p class="text-track-gray mb-6">Our most advanced solution with full HGV integration.</p>
+                        <ul class="space-y-3 mb-8">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray font-bold">Everything in Essentials, plus:</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Tachograph remote download</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">CanBus fuel reporting</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-track-red mt-1 mr-3"></i>
+                                <span class="text-track-gray">Advanced fleet analytics</span>
+                            </li>
+                        </ul>
+                        <a href="#" class="block w-full text-center bg-track-green-dark hover:bg-track-green text-white py-3 rounded-lg font-bold transition-all">
+                            Learn More
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- 10 Reasons Section -->
-    <section class="py-24 bg-track-light">
-        <div class="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
-            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
-                <span class="text-track-red font-semibold text-sm uppercase tracking-wider">Why Choose Us</span>
-                <h2 class="text-4xl lg:text-5xl font-bold text-track-black mt-4 mb-6">
-                    10 Reasons to Choose <span class="gradient-text">Trackitnow</span>
-                </h2>
+    <section class="py-20 lg:py-32 section-green">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-3xl lg:text-5xl font-black text-white mb-4">10 Reasons to Choose Trackitnow</h2>
+                <p class="text-xl text-white/70">Why we're the trusted choice for fleet management</p>
             </div>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
-                <!-- Reason 1 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-pound-sign text-2xl"></i>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-trophy"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">No Hidden Costs</h4>
-                    <p class="text-sm text-track-gray">Transparent pricing with no surprises</p>
+                    <h3 class="font-bold text-white mb-2">Award Winning</h3>
+                    <p class="text-white/70 text-sm">Regular updates at no additional cost. All services developed in-house.</p>
                 </div>
-
-                <!-- Reason 2 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.1s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-headset text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-globe"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">UK Support</h4>
-                    <p class="text-sm text-track-gray">Local support team based in the UK</p>
+                    <h3 class="font-bold text-white mb-2">Web & Mobile Access</h3>
+                    <p class="text-white/70 text-sm">ERA portal works on any browser. Free iOS & Android apps included.</p>
                 </div>
-
-                <!-- Reason 3 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.2s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-clock text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-signal"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">6 Year History</h4>
-                    <p class="text-sm text-track-gray">Long-term data retention included</p>
+                    <h3 class="font-bold text-white mb-2">UK Roaming SIMs</h3>
+                    <p class="text-white/70 text-sm">Full UK roaming using all major networks for best possible coverage.</p>
                 </div>
-
-                <!-- Reason 4 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.3s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-mobile-alt text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">Mobile Apps</h4>
-                    <p class="text-sm text-track-gray">iOS and Android apps included</p>
+                    <h3 class="font-bold text-white mb-2">Lifetime Warranty</h3>
+                    <p class="text-white/70 text-sm">Lifetime parts & labour warranty on all rental devices. No hidden costs.</p>
                 </div>
-
-                <!-- Reason 5 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.4s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-chart-line text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-pound-sign"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">Live Tracking</h4>
-                    <p class="text-sm text-track-gray">Real-time vehicle location updates</p>
+                    <h3 class="font-bold text-white mb-2">No Hidden Fees</h3>
+                    <p class="text-white/70 text-sm">No documentation, connection, or airtime fees. Fixed pricing for your term.</p>
                 </div>
-
-                <!-- Reason 6 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.5s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-file-alt text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-database"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">Reports</h4>
-                    <p class="text-sm text-track-gray">Automated daily, weekly, monthly</p>
+                    <h3 class="font-bold text-white mb-2">6 Years Data Access</h3>
+                    <p class="text-white/70 text-sm">Historic data retained for 6 years at no extra cost. Access anytime.</p>
                 </div>
-
-                <!-- Reason 7 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.6s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-map-marker-alt text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-chart-line"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">Geofencing</h4>
-                    <p class="text-sm text-track-gray">Create zones and get alerts</p>
+                    <h3 class="font-bold text-white mb-2">Scalable Solutions</h3>
+                    <p class="text-white/70 text-sm">Upgrade anytime without early cancellation fees as your business grows.</p>
                 </div>
-
-                <!-- Reason 8 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.7s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-car text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-tools"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">Driver ID</h4>
-                    <p class="text-sm text-track-gray">Know who's driving what</p>
+                    <h3 class="font-bold text-white mb-2">Competitive Service</h3>
+                    <p class="text-white/70 text-sm">Service work pricing almost half that of larger tracking providers.</p>
                 </div>
-
-                <!-- Reason 9 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.8s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-shield-alt text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-users"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">Secure</h4>
-                    <p class="text-sm text-track-gray">GDPR compliant data handling</p>
+                    <h3 class="font-bold text-white mb-2">Personal Service</h3>
+                    <p class="text-white/70 text-sm">Established 2008. Small friendly team. Same contact every time.</p>
                 </div>
-
-                <!-- Reason 10 -->
-                <div class="reason-card bg-white rounded-2xl p-6 text-center reveal" style="animation-delay: 0.9s;">
-                    <div class="reason-icon w-14 h-14 bg-track-red/10 rounded-full flex items-center justify-center mx-auto mb-4 text-track-red">
-                        <i class="fas fa-cogs text-2xl"></i>
+                
+                <div class="reveal bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-all md:col-span-2 lg:col-span-1">
+                    <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                        <i class="fas fa-map-marker-alt"></i>
                     </div>
-                    <h4 class="font-bold text-track-black mb-2">API Access</h4>
-                    <p class="text-sm text-track-gray">Integrate with your systems</p>
+                    <h3 class="font-bold text-white mb-2">UK & Ireland Network</h3>
+                    <p class="text-white/70 text-sm">Engineer network throughout UK & Ireland. Installations anywhere.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- Stats Section -->
-    <section class="py-24 bg-track-black relative overflow-hidden">
-        <div class="absolute inset-0 opacity-20">
-            <div class="absolute top-0 left-0 w-full h-full" style="background-image: radial-gradient(circle at 2px 2px, rgba(227,24,55,0.3) 1px, transparent 0); background-size: 40px 40px;"></div>
-        </div>
-        
-        <div class="w-full px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <!-- Stat 1 -->
-                <div class="text-center reveal">
-                    <div class="text-5xl lg:text-6xl font-bold text-track-red mb-2">
-                        <span class="counter" data-target="2008">0</span>
-                    </div>
-                    <p class="text-white text-lg font-medium">Founded</p>
-                    <p class="text-gray-400 text-sm">Over 15 years of innovation</p>
+    <section class="py-16 bg-track-red">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 text-center">
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-black text-white mb-2 counter" data-target="99.9" data-suffix="%">0</div>
+                    <div class="text-white/80">Service Uptime</div>
                 </div>
-
-                <!-- Stat 2 -->
-                <div class="text-center reveal" style="animation-delay: 0.1s;">
-                    <div class="text-5xl lg:text-6xl font-bold text-track-red mb-2">
-                        <span class="counter" data-target="99.9" data-decimal="true" data-suffix="%">0</span>
-                    </div>
-                    <p class="text-white text-lg font-medium">Uptime</p>
-                    <p class="text-gray-400 text-sm">Reliable service guarantee</p>
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-black text-white mb-2 counter" data-target="2008">0</div>
+                    <div class="text-white/80">Year Established</div>
                 </div>
-
-                <!-- Stat 3 -->
-                <div class="text-center reveal" style="animation-delay: 0.2s;">
-                    <div class="text-5xl lg:text-6xl font-bold text-track-red mb-2">
-                        <span class="counter" data-target="6">0</span>
-                    </div>
-                    <p class="text-white text-lg font-medium">Year Data Retention</p>
-                    <p class="text-gray-400 text-sm">Keep your records longer</p>
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-black text-white mb-2 counter" data-target="6" data-suffix="+">0</div>
+                    <div class="text-white/80">Years Data Retention</div>
                 </div>
-
-                <!-- Stat 4 -->
-                <div class="text-center reveal" style="animation-delay: 0.3s;">
-                    <div class="text-5xl lg:text-6xl font-bold text-track-red mb-2">
-                        <i class="fas fa-map-marked-alt"></i>
-                    </div>
-                    <p class="text-white text-lg font-medium">UK & Ireland</p>
-                    <p class="text-gray-400 text-sm">Full coverage across regions</p>
+                <div class="reveal">
+                    <div class="text-4xl lg:text-5xl font-black text-white mb-2">UK & IE</div>
+                    <div class="text-white/80">Full Coverage</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Section -->
-    <section id="demo" class="py-24 bg-gradient-to-br from-track-red to-track-red-dark relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        </div>
-        
-        <div class="w-full px-4 sm:px-6 lg:px-12 xl:px-20 relative z-10">
-            <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6 reveal">
-                    Ready to Transform Your Fleet?
-                </h2>
-                <p class="text-xl text-white/90 mb-10 reveal">
-                    Join thousands of UK businesses already using Trackitnow to optimise their operations, reduce costs, and improve safety.
-                </p>
-                
-                <div class="flex flex-col sm:flex-row gap-4 justify-center reveal">
-                    <button class="px-10 py-5 bg-white text-track-red font-bold rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center gap-2">
-                        <i class="fas fa-calendar-check"></i>
-                        Request a Demo
-                    </button>
-                    <button class="px-10 py-5 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white/10 transition-colors flex items-center justify-center gap-2">
-                        <i class="fas fa-phone"></i>
-                        Call 0800 123 4567
-                    </button>
-                </div>
-                
-                <p class="text-white/70 mt-8 text-sm reveal">
-                    Free consultation • No obligation • Expert advice
-                </p>
+    <section id="demo" class="py-20 lg:py-32 section-green">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal">
+            <h2 class="text-3xl lg:text-5xl font-black text-white mb-6">Ready to Transform Your Fleet?</h2>
+            <p class="text-xl text-white/70 mb-8">
+                See Trackitnow in action. Request a personalised demo tailored to your business needs.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#" class="bg-track-red hover:bg-track-red-dark text-white px-10 py-4 rounded-full font-bold text-lg transition-all hover:shadow-xl hover:scale-105 cta-glow">
+                    <i class="fas fa-calendar-check mr-2"></i> Request a Demo
+                </a>
+                <a href="tel:0800000000" class="border-2 border-white text-white hover:bg-white hover:text-track-green px-10 py-4 rounded-full font-bold text-lg transition-all">
+                    <i class="fas fa-phone mr-2"></i> Call Us Now
+                </a>
             </div>
+            <p class="mt-6 text-white/50 text-sm">Free consultation • No obligation • Expert advice</p>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-track-black text-white py-16">
-        <div class="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
-            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-12 mb-12">
-                <!-- Brand Column -->
+    <footer class="bg-track-green-dark text-white py-16 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
                 <div class="lg:col-span-2">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div class="w-12 h-12 bg-track-red rounded-lg flex items-center justify-center">
-                            <i class="fas fa-satellite-dish text-white text-xl"></i>
-                        </div>
-                        <div class="flex flex-col">
-                            <span class="text-2xl font-bold tracking-tight">TRACKIT<span class="text-track-red">NOW</span></span>
-                        </div>
+                    <div class="bg-white text-track-green font-black text-2xl px-4 py-2 rounded-lg tracking-tighter inline-block mb-4">
+                        TRACKIT<span class="text-track-red">NOW</span>
                     </div>
-                    <p class="text-gray-400 mb-6 max-w-sm">
-                        Leading UK provider of GPS vehicle tracking solutions. Helping businesses optimise their fleets since 2008.
+                    <p class="text-white/60 mb-4">
+                        GPS Vehicle Tracking, Monitoring and Locating solutions for businesses across the UK & Ireland since 2008.
                     </p>
-                    <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors">
-                            <i class="fab fa-youtube"></i>
-                        </a>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-track-red transition-colors"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                 </div>
-
-                <!-- Products -->
+                
                 <div>
-                    <h4 class="font-bold text-lg mb-6">Products</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">ERA Lite</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">ERA Essentials</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">ERA Advanced</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Remote Tachograph</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">CanBus Integration</a></li>
+                    <h4 class="font-bold mb-4 text-track-red">Products</h4>
+                    <ul class="space-y-2 text-white/60">
+                        <li><a href="#" class="hover:text-white transition-colors">ERA Lite</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">ERA Essentials</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">ERA Advanced</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Remote Tachograph</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">CanBus Integration</a></li>
                     </ul>
                 </div>
-
-                <!-- Solutions -->
+                
                 <div>
-                    <h4 class="font-bold text-lg mb-6">Solutions</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">HGV Tracking</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Van Tracking</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Fleet Management</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Driver Behaviour</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Accessories</a></li>
+                    <h4 class="font-bold mb-4 text-track-red">Solutions</h4>
+                    <ul class="space-y-2 text-white/60">
+                        <li><a href="#" class="hover:text-white transition-colors">HGV Tracking</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Van Tracking</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Car Tracking</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Fleet Management</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Driver ID</a></li>
                     </ul>
                 </div>
-
-                <!-- Company -->
+                
                 <div>
-                    <h4 class="font-bold text-lg mb-6">Company</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">About Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Case Studies</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Industries</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">News</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Contact</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-track-red transition-colors">Support</a></li>
+                    <h4 class="font-bold mb-4 text-track-red">Company</h4>
+                    <ul class="space-y-2 text-white/60">
+                        <li><a href="#" class="hover:text-white transition-colors">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Case Studies</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">News</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Support</a></li>
                     </ul>
                 </div>
             </div>
-
-            <!-- Bottom Bar -->
-            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-gray-400 text-sm">
+            
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-white/40 text-sm mb-4 md:mb-0">
                     © 2024 Trackitnow Ltd. All rights reserved.
                 </p>
-                <div class="flex gap-6 text-sm">
-                    <a href="#" class="text-gray-400 hover:text-track-red transition-colors">Privacy Policy</a>
-                    <a href="#" class="text-gray-400 hover:text-track-red transition-colors">Terms of Service</a>
-                    <a href="#" class="text-gray-400 hover:text-track-red transition-colors">Cookie Policy</a>
+                <div class="flex space-x-6 text-sm text-white/40">
+                    <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-white transition-colors">Cookie Policy</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script>
-        // Mobile Menu Toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const closeMobileMenu = document.getElementById('closeMobileMenu');
-        const mobileMenu = document.getElementById('mobileMenu');
-
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenu.classList.add('open');
-            document.body.style.overflow = 'hidden';
-        });
-
-        closeMobileMenu.addEventListener('click', () => {
-            mobileMenu.classList.remove('open');
-            document.body.style.overflow = '';
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                mobileMenu.classList.remove('open');
-                document.body.style.overflow = '';
-            }
-        });
-
-        // Scroll Reveal Animation
-        const revealElements = document.querySelectorAll('.reveal');
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
         
-        const revealOnScroll = () => {
-            revealElements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                const windowHeight = window.innerHeight;
-                
-                if (elementTop < windowHeight - 100) {
-                    element.classList.add('active');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+        
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+        
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('active');
+                    }, index * 100);
+                    revealObserver.unobserve(entry.target);
                 }
             });
-        };
-
-        window.addEventListener('scroll', revealOnScroll);
-        window.addEventListener('load', revealOnScroll);
-
+        }, { threshold: 0.1 });
+        
+        revealElements.forEach(el => revealObserver.observe(el));
+        
         // Counter Animation
         const counters = document.querySelectorAll('.counter');
-        const speed = 200;
-
-        const animateCounters = () => {
-            counters.forEach(counter => {
-                const target = parseFloat(counter.getAttribute('data-target'));
-                const isDecimal = counter.getAttribute('data-decimal') === 'true';
-                const suffix = counter.getAttribute('data-suffix') || '';
-                const count = parseFloat(counter.innerText);
-                const inc = target / speed;
-
-                if (count < target) {
-                    const newValue = isDecimal ? (count + inc).toFixed(1) : Math.ceil(count + inc);
-                    counter.innerText = newValue + suffix;
-                    setTimeout(animateCounters, 20);
-                } else {
-                    counter.innerText = target + suffix;
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = parseFloat(counter.dataset.target);
+                    const suffix = counter.dataset.suffix || '';
+                    const duration = 2000;
+                    const step = target / (duration / 16);
+                    let current = 0;
+                    
+                    const updateCounter = () => {
+                        current += step;
+                        if (current < target) {
+                            counter.textContent = (target % 1 === 0 ? Math.floor(current) : current.toFixed(1)) + suffix;
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.textContent = target + suffix;
+                        }
+                    };
+                    
+                    updateCounter();
+                    counterObserver.unobserve(counter);
                 }
             });
-        };
-
-        // Trigger counters when stats section is visible
-        const statsSection = document.querySelector('.bg-track-black .counter').closest('section');
-        let countersAnimated = false;
-
-        const checkCounters = () => {
-            if (countersAnimated) return;
-            
-            const rect = statsSection.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                animateCounters();
-                countersAnimated = true;
-            }
-        };
-
-        window.addEventListener('scroll', checkCounters);
-
-        // Smooth Scroll for anchor links
+        }, { threshold: 0.5 });
+        
+        counters.forEach(counter => counterObserver.observe(counter));
+        
+        // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Close mobile menu if open
-                    mobileMenu.classList.remove('open');
-                    document.body.style.overflow = '';
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    mobileMenu.classList.add('translate-x-full');
                 }
             });
-        });
-
-        // Header background on scroll
-        const header = document.querySelector('header');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                header.classList.add('shadow-lg');
-            } else {
-                header.classList.remove('shadow-lg');
-            }
         });
     </script>
 </body>
